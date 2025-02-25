@@ -2,77 +2,56 @@ package com.uc.employee_payroll_app.service;
 
 
 
+
 import com.uc.employee_payroll_app.dto.EmployeeDTO;
+import com.uc.employee_payroll_app.exception_handler.EmployeeNotFoundException;
 import com.uc.employee_payroll_app.model.Employee;
 import com.uc.employee_payroll_app.repository.EmployeeRepository;
-import com.uc.employee_payroll_app.util.EmployeeMapper;
-import jakarta.validation.Valid;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
-@Slf4j
 @Service
-@Validated
 public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
-    private final EmployeeMapper employeeMapper;
 
-    @Autowired
-    public EmployeeService(EmployeeRepository employeeRepository, EmployeeMapper employeeMapper) {
+    public EmployeeService(EmployeeRepository employeeRepository) {
         this.employeeRepository = employeeRepository;
-        this.employeeMapper = employeeMapper;
     }
 
-    public List<EmployeeDTO> getAllEmployees() {
-        log.info("Fetching all employees from the database");
-        return employeeRepository.findAll()
-                .stream()
-                .map(employeeMapper::toDTO)
-                .collect(Collectors.toList());
+    public List<Employee> getAllEmployees() {
+        return employeeRepository.findAll();
     }
 
-    public EmployeeDTO getEmployeeById(Long id) {
-        log.info("Fetching employee with ID: {}", id);
-        Optional<Employee> employeeOptional = employeeRepository.findById(id);
-        return employeeOptional.map(employeeMapper::toDTO).orElse(null);
+    public Employee getEmployeeById(Long id) {
+        return employeeRepository.findById(id)
+                .orElseThrow(() -> new EmployeeNotFoundException("Employee with ID " + id + " not found"));
     }
 
-    public EmployeeDTO createEmployee(@Valid EmployeeDTO employeeDTO) {
-        log.info("Creating new employee: {}", employeeDTO);
-        Employee employee = employeeMapper.toEntity(employeeDTO);
-        Employee savedEmployee = employeeRepository.save(employee);
-        return employeeMapper.toDTO(savedEmployee);
+    public Employee createEmployee(EmployeeDTO employeeDTO) {
+        Employee employee = new Employee();
+        employee.setName(employeeDTO.getName());
+        employee.setSalary(employeeDTO.getSalary());
+        return employeeRepository.save(employee);
     }
 
-    public EmployeeDTO updateEmployee(Long id, @Valid EmployeeDTO employeeDTO) {
-        log.info("Updating employee with ID: {}", id);
-        Optional<Employee> existingEmployeeOptional = employeeRepository.findById(id);
+    public Employee updateEmployee(Long id, EmployeeDTO employeeDTO) {
+        Employee existingEmployee = employeeRepository.findById(id)
+                .orElseThrow(() -> new EmployeeNotFoundException("Employee with ID " + id + " not found"));
 
-        if (existingEmployeeOptional.isPresent()) {
-            Employee existingEmployee = existingEmployeeOptional.get();
-            existingEmployee.setName(employeeDTO.getName());
-            existingEmployee.setEmail(employeeDTO.getEmail()); //  Ensure email is updated
-            existingEmployee.setSalary(employeeDTO.getSalary()); // Ensure salary is updated
-            Employee updatedEmployee = employeeRepository.save(existingEmployee);
-            return employeeMapper.toDTO(updatedEmployee);
-        }
-        log.warn("Employee with ID {} not found!", id);
-        return null;
+        existingEmployee.setName(employeeDTO.getName());
+        existingEmployee.setSalary(employeeDTO.getSalary());
+
+        return employeeRepository.save(existingEmployee);
     }
 
     public void deleteEmployee(Long id) {
-        log.info("Deleting employee with ID: {}", id);
-        if (employeeRepository.existsById(id)) {
-            employeeRepository.deleteById(id);
-        } else {
-            log.warn("Employee with ID {} not found!", id);
-        }
+        Employee existingEmployee = employeeRepository.findById(id)
+                .orElseThrow(() -> new EmployeeNotFoundException("Employee with ID " + id + " not found"));
+
+        employeeRepository.deleteById(id);
     }
 }
+

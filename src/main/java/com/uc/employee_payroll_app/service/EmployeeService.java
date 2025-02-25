@@ -2,44 +2,51 @@ package com.uc.employee_payroll_app.service;
 
 
 import com.uc.employee_payroll_app.model.Employee;
-import com.uc.employee_payroll_app.repository.EmployeeRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Service
 public class EmployeeService {
 
-    @Autowired
-    private EmployeeRepository repository;  // Injecting Repository
+    private final List<Employee> employees = new ArrayList<>(); // Temporary Storage
+    private final AtomicLong idCounter = new AtomicLong(1); // Generates unique IDs
 
     // Get all employees
     public List<Employee> getAllEmployees() {
-        return repository.findAll();
+        return employees;
     }
 
     // Get employee by ID
     public Optional<Employee> getEmployeeById(Long id) {
-        return repository.findById(id);
+        return employees.stream().filter(emp -> emp.getId().equals(id)).findFirst();
     }
 
     // Add new employee
     public Employee addEmployee(Employee employee) {
-        return repository.save(employee);
+        employee.setId(idCounter.getAndIncrement()); // Auto-increment ID
+        employees.add(employee);
+        return employee;
     }
 
     // Update employee
     public Employee updateEmployee(Long id, Employee employeeDetails) {
-        Employee employee = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Employee Not Found"));
-        employee.setName(employeeDetails.getName());
-        employee.setSalary(employeeDetails.getSalary());
-        return repository.save(employee);
+        Optional<Employee> existingEmployee = getEmployeeById(id);
+        if (existingEmployee.isPresent()) {
+            Employee employee = existingEmployee.get();
+            employee.setName(employeeDetails.getName());
+            employee.setSalary(employeeDetails.getSalary());
+            return employee;
+        } else {
+            throw new RuntimeException("Employee Not Found");
+        }
     }
 
     // Delete employee
     public void deleteEmployee(Long id) {
-        repository.deleteById(id);
+        employees.removeIf(emp -> emp.getId().equals(id));
     }
 }

@@ -16,7 +16,7 @@ import java.util.Optional;
 public class EmployeeController {
 
     @Autowired
-    private EmployeeService service;  // Injecting Service Layer
+    private EmployeeService service;
 
     // Get all employees
     @GetMapping
@@ -49,4 +49,3 @@ public class EmployeeController {
         return "Employee with ID " + id + " deleted!";
     }
 }
-

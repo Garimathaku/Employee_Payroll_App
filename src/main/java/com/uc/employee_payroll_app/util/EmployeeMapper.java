@@ -2,20 +2,35 @@ package com.uc.employee_payroll_app.util;
 
 
 
+
 import com.uc.employee_payroll_app.dto.EmployeeDTO;
 import com.uc.employee_payroll_app.model.Employee;
+import org.springframework.stereotype.Component;
 
-
+@Component
 public class EmployeeMapper {
 
-    // Convert Entity → DTO
-    public static EmployeeDTO toDTO(Employee employee) {
-        return new EmployeeDTO(employee.getName(), employee.getSalary());
+    public EmployeeDTO toDTO(Employee employee) {
+        if (employee == null) {
+            return null;
+        }
+        return new EmployeeDTO(
+                employee.getId(),
+                employee.getName(),
+                employee.getEmail(),
+                employee.getSalary()
+        );
     }
 
-    // Convert DTO → Entity
-    public static Employee toEntity(EmployeeDTO dto) {
-        return new Employee(null, dto.getName(), dto.getSalary());
+    public Employee toEntity(EmployeeDTO employeeDTO) {
+        if (employeeDTO == null) {
+            return null;
+        }
+        return new Employee(
+                employeeDTO.getId(),
+                employeeDTO.getName(),
+                employeeDTO.getEmail(),
+                employeeDTO.getSalary()
+        );
     }
 }
-

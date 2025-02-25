@@ -1,4 +1,4 @@
-package com.uc.employee_payroll_app.DTO;
+package com.uc.employee_payroll_app.dto;
 
 
 

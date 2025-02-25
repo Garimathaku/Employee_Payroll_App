@@ -2,7 +2,7 @@ package com.uc.employee_payroll_app.util;
 
 
 
-import com.uc.employee_payroll_app.DTO.EmployeeDTO;
+import com.uc.employee_payroll_app.dto.EmployeeDTO;
 import com.uc.employee_payroll_app.model.Employee;
 
 

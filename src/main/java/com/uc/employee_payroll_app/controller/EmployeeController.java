@@ -2,34 +2,43 @@ package com.uc.employee_payroll_app.controller;
 
 
 import com.uc.employee_payroll_app.dto.EmployeeDTO;
+import com.uc.employee_payroll_app.model.Employee;
 import com.uc.employee_payroll_app.service.EmployeeService;
-import jakarta.validation.Valid;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/employees")
-@Validated
 public class EmployeeController {
 
-    private final EmployeeService employeeService;
+    @Autowired
+    private EmployeeService employeeService;
 
-    public EmployeeController(EmployeeService employeeService) {
-        this.employeeService = employeeService;
+    @GetMapping
+    public List<Employee> getAllEmployees() {
+        return employeeService.getAllEmployees();
     }
 
-    // Create Employee
+    @GetMapping("/{id}")
+    public Employee getEmployeeById(@PathVariable Long id) {  // Changed int to Long
+        return employeeService.getEmployeeById(id);
+    }
+
     @PostMapping
-    public ResponseEntity<String> createEmployee(@Valid @RequestBody EmployeeDTO employeeDTO) {
-        employeeService.createEmployee(employeeDTO);
-        return ResponseEntity.ok("Employee created successfully");
+    public Employee addEmployee(@RequestBody EmployeeDTO employeeDTO) {
+        return employeeService.addEmployee(employeeDTO);
     }
 
-    // Update Employee
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateEmployee(@PathVariable Long id, @Valid @RequestBody EmployeeDTO employeeDTO) {
-        employeeService.updateEmployee(id, employeeDTO);
-        return ResponseEntity.ok("Employee updated successfully");
+    public Employee updateEmployee(@PathVariable Long id, @RequestBody EmployeeDTO employeeDTO) {  // Changed int to Long
+        return employeeService.updateEmployee(id, employeeDTO);
+    }
+
+    @DeleteMapping("/{id}")
+    public String deleteEmployee(@PathVariable Long id) {  // Changed int to Long
+        employeeService.deleteEmployee(id);
+        return "Employee with ID " + id + " deleted successfully.";
     }
 }

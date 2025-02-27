@@ -2,29 +2,40 @@ package com.uc.employee_payroll_app.model;
 
 
 
-
+import com.uc.employee_payroll_app.dto.EmployeeDTO;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Data;
+import java.time.LocalDate;
+import java.util.List;
 
 @Entity
-@Table(name = "employees_1")
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@ToString
+@Data
 public class Employee {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long id;  // Changed from int to Long
 
-    @Column(name = "name", nullable = false)
     private String name;
+    private long salary;
+    private String gender;
+    private LocalDate startDate;
+    private String note;
+    private String profilePic;
 
-    @Column(name = "email", nullable = false, unique = true)
-    private String email;
+    @ElementCollection
+    private List<String> departments;
 
-    @Column(name = "salary")
-    private double salary;
+    public Employee() {}
+
+    public Employee(Long id, EmployeeDTO employeeDTO) { // Changed int to Long
+        this.id = id;
+        this.name = employeeDTO.name;
+        this.salary = employeeDTO.salary;
+        this.gender = employeeDTO.gender;
+        this.note = employeeDTO.note;
+        this.startDate = employeeDTO.startDate;
+        this.profilePic = employeeDTO.profilePic;
+        this.departments = employeeDTO.departments;
+    }
 }

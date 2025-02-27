@@ -2,29 +2,34 @@ package com.uc.employee_payroll_app.dto;
 
 
 
+import java.time.LocalDate;
+import java.util.List;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.validation.constraints.Min;
 
-@Getter
-@Setter
-public class EmployeeDTO {
+import lombok.ToString;
 
-    private Long id;
 
-    @NotBlank(message = "Name is required and cannot be empty.")
-    @Size(min = 2, max = 50, message = "Name must be between 2 and 50 characters.")
+
+public @ToString class EmployeeDTO {
+
+
+
     @Pattern(regexp = "^[A-Za-z ]+$", message = "Name can only contain letters and spaces.")
-    private String name;
+    public String name;
 
-    @NotBlank(message = "Email is required.")
-    @Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z]{2,6}$",
-            message = "Invalid email format.")
-    private String email;
 
-    private Double salary;
+
+    public String gender;
+    public LocalDate startDate;
+    public String note;
+    @Min(value=500,
+    message="Min wage should be more than 500")
+    public long salary;
+    public String profilePic;
+    public List<String>departments;
+
+
 }
 

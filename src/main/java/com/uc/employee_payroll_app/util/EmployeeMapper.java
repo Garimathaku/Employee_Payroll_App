@@ -2,7 +2,6 @@ package com.uc.employee_payroll_app.util;
 
 
 
-
 import com.uc.employee_payroll_app.dto.EmployeeDTO;
 import com.uc.employee_payroll_app.model.Employee;
 import org.springframework.stereotype.Component;
@@ -10,27 +9,27 @@ import org.springframework.stereotype.Component;
 @Component
 public class EmployeeMapper {
 
-    public EmployeeDTO toDTO(Employee employee) {
-        if (employee == null) {
-            return null;
-        }
-        EmployeeDTO employeeDTO = new EmployeeDTO();
-        employeeDTO.setId(employee.getId());
-        employeeDTO.setName(employee.getName());
-        employeeDTO.setEmail(employee.getEmail()); //  Ensure email exists in DTO
-        employeeDTO.setSalary(employee.getSalary()); //  Ensure salary exists in DTO
-        return employeeDTO;
+    public Employee toEntity(EmployeeDTO employeeDTO) {
+        Employee employee = new Employee();
+        employee.setName(employeeDTO.name);
+        employee.setSalary(employeeDTO.salary);
+        employee.setGender(employeeDTO.gender);
+        employee.setStartDate(employeeDTO.startDate);
+        employee.setNote(employeeDTO.note);
+        employee.setProfilePic(employeeDTO.profilePic);
+        employee.setDepartments(employeeDTO.departments);
+        return employee;
     }
 
-    public Employee toEntity(EmployeeDTO employeeDTO) {
-        if (employeeDTO == null) {
-            return null;
-        }
-        Employee employee = new Employee();
-        employee.setId(employeeDTO.getId());
-        employee.setName(employeeDTO.getName());
-        employee.setEmail(employeeDTO.getEmail()); //  Ensure email exists in DTO
-        employee.setSalary(employeeDTO.getSalary()); //  Ensure salary exists in DTO
-        return employee;
+    public EmployeeDTO toDTO(Employee employee) {
+        EmployeeDTO employeeDTO = new EmployeeDTO();
+        employeeDTO.name = employee.getName();
+        employeeDTO.salary = employee.getSalary();
+        employeeDTO.gender = employee.getGender();
+        employeeDTO.startDate = employee.getStartDate();
+        employeeDTO.note = employee.getNote();
+        employeeDTO.profilePic = employee.getProfilePic();
+        employeeDTO.departments = employee.getDepartments();
+        return employeeDTO;
     }
 }

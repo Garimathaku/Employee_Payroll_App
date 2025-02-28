@@ -11,25 +11,25 @@ public class EmployeeMapper {
 
     public Employee toEntity(EmployeeDTO employeeDTO) {
         Employee employee = new Employee();
-        employee.setName(employeeDTO.name);
-        employee.setSalary(employeeDTO.salary);
-        employee.setGender(employeeDTO.gender);
-        employee.setStartDate(employeeDTO.startDate);
-        employee.setNote(employeeDTO.note);
-        employee.setProfilePic(employeeDTO.profilePic);
-        employee.setDepartment(employeeDTO.department);
+        employee.setName(employeeDTO.getName());
+        employee.setSalary(employeeDTO.getSalary());
+        employee.setGender(employeeDTO.getGender());
+        employee.setStartDate(employeeDTO.getStartDate());
+        employee.setNote(employeeDTO.getNote());
+        employee.setProfilePic(employeeDTO.getProfilePic());
+        employee.setDepartments(employeeDTO.getDepartment());  // Check if it's a list or a string
         return employee;
     }
 
     public EmployeeDTO toDTO(Employee employee) {
         EmployeeDTO employeeDTO = new EmployeeDTO();
-        employeeDTO.name = employee.getName();
-        employeeDTO.salary = employee.getSalary();
-        employeeDTO.gender = employee.getGender();
-        employeeDTO.startDate = employee.getStartDate();
-        employeeDTO.note = employee.getNote();
-        employeeDTO.profilePic = employee.getProfilePic();
-        employeeDTO.department = employee.getDepartment();
+        employeeDTO.setName(employee.getName());
+        employeeDTO.setSalary(employee.getSalary());
+        employeeDTO.setGender(employee.getGender());
+        employeeDTO.setStartDate(employee.getStartDate());
+        employeeDTO.setNote(employee.getNote());
+        employeeDTO.setProfilePic(employee.getProfilePic());
+        employeeDTO.setDepartment(employee.getDepartments());  // Ensure correct mapping
         return employeeDTO;
     }
 }

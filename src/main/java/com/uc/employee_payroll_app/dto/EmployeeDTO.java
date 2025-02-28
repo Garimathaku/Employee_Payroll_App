@@ -17,22 +17,22 @@ public class EmployeeDTO {
     public String name;
 
     @Min(value = 500, message = "Min Wage should be more than 500")
-    public long salary;
+    public  long salary;
 
     @Pattern(regexp = "male|female", message = "Gender needs to be male or female")
-    public String gender;
+    public  String gender;
 
     @JsonFormat(pattern = "dd MMM yyyy")
     @NotNull(message = "startDate should Not be Empty")
     @PastOrPresent(message = "startDate should be past or today's date")
-    public LocalDate startDate;
+    public  LocalDate startDate;
 
     @NotBlank(message = "Note cannot be Empty")
-    public String note;
+    public  String note;
 
     @NotBlank(message = "profilePic cannot be Empty")
-    public String profilePic;
+    public  String profilePic;
 
     @NotNull(message = "department should Not be Empty")
-    public List<String> department;
+    public  List<String> department;
 }

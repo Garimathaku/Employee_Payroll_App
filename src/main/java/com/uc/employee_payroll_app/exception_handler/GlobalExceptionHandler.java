@@ -3,34 +3,28 @@ package com.uc.employee_payroll_app.exception_handler;
 
 
 
-import org.springframework.http.HttpStatus;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import java.util.HashMap;
-import java.util.Map;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 
 @ControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
 
-    // Handling Validation Errors
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, String>> handleValidationErrors(MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
-        ex.getBindingResult().getFieldErrors().forEach(error ->
-                errors.put(error.getField(), error.getDefaultMessage()));
+    private static final String message = "Exception while processing REST Request";
 
-        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<String> handleHttpMessageNotReadableException(HttpMessageNotReadableException exception) {
+        log.error("Invalid Date Format", exception);
+        return new ResponseEntity<>("Should have date in the Format dd MMM yyyy", HttpStatus.BAD_REQUEST);
     }
 
-    // Handling Employee Not Found Exception
-    @ExceptionHandler(EmployeeNotFoundException.class)
-    public ResponseEntity<Map<String, String>> handleEmployeeNotFound(EmployeeNotFoundException ex) {
-        Map<String, String> errorResponse = new HashMap<>();
-        errorResponse.put("error", ex.getMessage());
-
-        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<String> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
+        return new ResponseEntity<>("Validation Error: " + exception.getMessage(), HttpStatus.BAD_REQUEST);
     }
 }

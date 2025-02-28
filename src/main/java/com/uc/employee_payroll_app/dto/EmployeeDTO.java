@@ -2,34 +2,37 @@ package com.uc.employee_payroll_app.dto;
 
 
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.validation.constraints.*;
 import java.time.LocalDate;
 import java.util.List;
 
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Min;
+@Data
+@NoArgsConstructor
+public class EmployeeDTO {
 
-import lombok.ToString;
-
-
-
-public @ToString class EmployeeDTO {
-
-
-
-    @Pattern(regexp = "^[A-Za-z ]+$", message = "Name can only contain letters and spaces.")
+    @Pattern(regexp = "^[A-Z]{1}[a-zA-Z\s]{2,}$", message = "Employee name Invalid")
     public String name;
 
-
-
-    public String gender;
-    public LocalDate startDate;
-    public String note;
-    @Min(value=500,
-    message="Min wage should be more than 500")
+    @Min(value = 500, message = "Min Wage should be more than 500")
     public long salary;
+
+    @Pattern(regexp = "male|female", message = "Gender needs to be male or female")
+    public String gender;
+
+    @JsonFormat(pattern = "dd MMM yyyy")
+    @NotNull(message = "startDate should Not be Empty")
+    @PastOrPresent(message = "startDate should be past or today's date")
+    public LocalDate startDate;
+
+    @NotBlank(message = "Note cannot be Empty")
+    public String note;
+
+    @NotBlank(message = "profilePic cannot be Empty")
     public String profilePic;
-    public List<String>departments;
 
-
+    @NotNull(message = "department should Not be Empty")
+    public List<String> department;
 }
-

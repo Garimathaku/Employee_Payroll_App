@@ -17,7 +17,7 @@ public class EmployeeMapper {
         employee.setStartDate(employeeDTO.startDate);
         employee.setNote(employeeDTO.note);
         employee.setProfilePic(employeeDTO.profilePic);
-        employee.setDepartments(employeeDTO.departments);
+        employee.setDepartment(employeeDTO.department);
         return employee;
     }
 
@@ -29,7 +29,7 @@ public class EmployeeMapper {
         employeeDTO.startDate = employee.getStartDate();
         employeeDTO.note = employee.getNote();
         employeeDTO.profilePic = employee.getProfilePic();
-        employeeDTO.departments = employee.getDepartments();
+        employeeDTO.department = employee.getDepartment();
         return employeeDTO;
     }
 }

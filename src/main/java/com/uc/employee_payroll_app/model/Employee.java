@@ -1,37 +1,27 @@
 package com.uc.employee_payroll_app.model;
 
-
-
-
-import com.uc.employee_payroll_app.dto.EmployeeDTO;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.util.List;
 
-@Data
-@NoArgsConstructor
 @Entity
 @Table(name = "employee2")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Employee {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
-    private long salary;
     private String gender;
-    private String note;
-    private String profilePic;
+    private double salary;
 
-    public Employee(EmployeeDTO empPayrollDTO) {
-        this.updateEmployeePayrollData(empPayrollDTO);
-    }
-
-    public void updateEmployeePayrollData(EmployeeDTO empPayrollDTO) {
-        this.name = empPayrollDTO.getName();
-        this.salary = empPayrollDTO.getSalary();
-        this.gender = empPayrollDTO.getGender();
-        this.note = empPayrollDTO.getNote();
-        this.profilePic = empPayrollDTO.getProfilePic();
-    }
+    @ElementCollection
+    @CollectionTable(name = "employee_department", joinColumns = @JoinColumn(name = "employee_id"))
+    @Column(name = "department")
+    private List<String> department;
 }

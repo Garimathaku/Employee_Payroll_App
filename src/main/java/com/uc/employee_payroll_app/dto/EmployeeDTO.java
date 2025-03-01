@@ -1,15 +1,13 @@
 package com.uc.employee_payroll_app.dto;
 
 
-
-
 import lombok.Data;
+import java.util.List;
 
 @Data
 public class EmployeeDTO {
     private String name;
-    private long salary;
     private String gender;
-    private String note;
-    private String profilePic;
+    private double salary;
+    private List<String> department;
 }
